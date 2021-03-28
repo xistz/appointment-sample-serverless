@@ -14,7 +14,7 @@ async function getRoleId(role: string) {
   return filtered[0].id;
 }
 
-export async function register(userId: string, role: string) {
+export async function registerUser(userId: string, role: string) {
   const roleId = await getRoleId(role);
 
   const params: ObjectWithId = {

@@ -3,7 +3,7 @@ import 'source-map-support/register';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { registerUser } from 'src/service/user';
+import { registerUser } from '@services/user';
 
 import schema from './schema';
 
