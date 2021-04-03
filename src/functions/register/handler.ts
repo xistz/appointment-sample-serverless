@@ -1,10 +1,8 @@
-import 'source-map-support/register';
-
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { registerUser } from '@services/user';
-
+import 'source-map-support/register';
 import schema from './schema';
 
 interface User {
@@ -39,7 +37,4 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
 export const main = middyfy(register);
 
-function isNewUser(user: User) {
-  if (user.role.length !== 0) return false;
-  return true;
-}
+const isNewUser = (user: User) => user.role.length === 0;
