@@ -10,9 +10,7 @@ interface User {
   role: string[];
 }
 
-const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   const user = {
     id: 'dummy',
     role: [],
