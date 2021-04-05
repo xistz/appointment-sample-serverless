@@ -1,6 +1,6 @@
-import type { AWS } from '@serverless/typescript';
-
+import auth from '@functions/auth';
 import register from '@functions/register';
+import type { AWS } from '@serverless/typescript';
 
 const serverlessConfiguration: AWS = {
   service: 'appointment-sample-serverless',
@@ -25,7 +25,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { register },
+  functions: { register, auth },
 };
 
 module.exports = serverlessConfiguration;
