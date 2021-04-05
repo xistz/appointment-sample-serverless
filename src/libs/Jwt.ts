@@ -25,15 +25,28 @@ export interface User {
 }
 
 /**
- * Parse a JWT token and return user's roles
- * @param jwtToken JWT token to parse
+ * Parse authorization header and return user object
+ * @param authorizationHeader authorization header to parse
  * @returns a user object containing the user's id and roles
  */
-export function getUser(jwtToken: string): User {
+export function getUser(authorizationHeader: string): User {
+  const jwtToken = getToken(authorizationHeader);
   const decodedJwt = decode(jwtToken) as JwtPayload;
 
   return {
     id: decodedJwt.sub,
     roles: decodedJwt[`${process.env.AUTH0_NAMESPACE}/roles`] as string[],
   };
+}
+
+export function getToken(authHeader: string): string {
+  if (!authHeader) throw new Error('No authentication header');
+
+  if (!authHeader.toLowerCase().startsWith('bearer '))
+    throw new Error('Invalid authentication header');
+
+  const split = authHeader.split(' ');
+  const token = split[1];
+
+  return token;
 }

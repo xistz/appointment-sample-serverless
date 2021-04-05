@@ -1,4 +1,4 @@
-import { Jwt, JwtPayload } from '@libs/Jwt';
+import { getToken, Jwt, JwtPayload } from '@libs/Jwt';
 import { decode, verify, VerifyOptions } from 'jsonwebtoken';
 import * as jwksClient from 'jwks-rsa';
 import 'source-map-support/register';
@@ -37,16 +37,4 @@ export async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const verifiedToken = verify(token, signingKey, verifyOptions) as JwtPayload;
 
   return verifiedToken;
-}
-
-function getToken(authHeader: string): string {
-  if (!authHeader) throw new Error('No authentication header');
-
-  if (!authHeader.toLowerCase().startsWith('bearer '))
-    throw new Error('Invalid authentication header');
-
-  const split = authHeader.split(' ');
-  const token = split[1];
-
-  return token;
 }
