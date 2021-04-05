@@ -12,6 +12,7 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
   console.log('register called');
+  console.log('authorization header', event.headers.Authorization);
   const user = getUser(event.headers.Authorization);
   const { role } = event.body;
 
