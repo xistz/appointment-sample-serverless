@@ -11,7 +11,7 @@ export default {
         path: 'register',
         cors: true,
         request: {
-          schema: {
+          schemas: {
             'application/json': schema,
           },
         },
