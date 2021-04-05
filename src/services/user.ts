@@ -24,8 +24,8 @@ export async function registerUser(userId: string, role: string) {
     roles: [roleId],
   };
 
-  console.info('params', params);
-  console.info('data', data);
+  console.info(params);
+  console.info(data);
 
   await auth0.assignRolestoUser(params, data);
 }
