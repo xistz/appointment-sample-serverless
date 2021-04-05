@@ -11,10 +11,9 @@ import schema from './schema';
 const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
+  console.log('register called');
   const user = getUser(event.headers.Authorization);
   const { role } = event.body;
-
-  console.log('register called');
 
   console.info(role);
   console.info(user);
