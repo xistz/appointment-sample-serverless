@@ -1,22 +1,17 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
-import { formatJSONResponse } from '@libs/apiGateway';
+import {
+  formatJSONResponse,
+  ValidatedEventAPIGatewayProxyEvent,
+} from '@libs/apiGateway';
+import { getUser, User } from '@libs/Jwt';
 import { middyfy } from '@libs/lambda';
 import { registerUser } from '@services/user';
 import 'source-map-support/register';
 import schema from './schema';
 
-interface User {
-  id: string;
-  role: string[];
-}
-
 const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
-  const user = {
-    id: 'dummy',
-    role: [],
-  };
+  const user = getUser(event.headers.Authorization);
   const { role } = event.body;
 
   console.log(role);
@@ -24,7 +19,7 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   if (!isNewUser(user)) {
     return formatJSONResponse(
       {
-        message: `user has already registered as a ${user.role[0]}`,
+        message: `user has already registered as a ${user.roles[0]}`,
       },
       400
     );
@@ -39,4 +34,4 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
 export const main = middyfy(register);
 
-const isNewUser = (user: User) => user.role.length === 0;
+const isNewUser = (user: User) => user.roles.length === 0;

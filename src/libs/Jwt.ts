@@ -16,24 +16,24 @@ export interface JwtPayload {
   sub: string;
   iat: number;
   exp: number;
+  [key: string]: string | number | string[];
 }
 
-/**
- * Parse a JWT token and return a user id
- * @param jwtToken JWT token to parse
- * @returns a user id from the JWT token
- */
-export function parseUserId(jwtToken: string): string {
-  const decodedJwt = decode(jwtToken) as JwtPayload;
-  return decodedJwt.sub;
+export interface User {
+  id: string;
+  roles: string[];
 }
 
 /**
  * Parse a JWT token and return user's roles
  * @param jwtToken JWT token to parse
- * @returns a user's roles from the JWT token
+ * @returns a user object containing the user's id and roles
  */
-export function parseUserRoles(jwtToken: string): string {
+export function getUser(jwtToken: string): User {
   const decodedJwt = decode(jwtToken) as JwtPayload;
-  return decodedJwt.sub;
+
+  return {
+    id: decodedJwt.sub,
+    roles: decodedJwt[`${process.env.AUTH0_NAMESPACE}/roles`] as string[],
+  };
 }
