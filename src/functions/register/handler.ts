@@ -10,12 +10,16 @@ interface User {
   role: string[];
 }
 
-const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+  event
+) => {
   const user = {
     id: 'dummy',
     role: [],
   };
   const { role } = event.body;
+
+  console.log(role);
 
   if (!isNewUser(user)) {
     return formatJSONResponse(
