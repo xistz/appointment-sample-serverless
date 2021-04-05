@@ -14,7 +14,8 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   const user = getUser(event.headers.Authorization);
   const { role } = event.body;
 
-  console.log(role);
+  console.log('role', role);
+  console.log('user', user);
 
   if (!isNewUser(user)) {
     return formatJSONResponse(

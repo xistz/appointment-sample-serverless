@@ -1,4 +1,4 @@
-import { ManagementClient, GetUsersData, ObjectWithId, RolesData } from 'auth0';
+import { GetUsersData, ManagementClient, ObjectWithId, RolesData } from 'auth0';
 
 const auth0 = new ManagementClient({
   domain: `${process.env.AUTH0_DOMAIN}`,
@@ -23,6 +23,9 @@ export async function registerUser(userId: string, role: string) {
   const data: RolesData = {
     roles: [roleId],
   };
+
+  console.log('params', params);
+  console.log('data', data);
 
   await auth0.assignRolestoUser(params, data);
 }
