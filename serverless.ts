@@ -21,6 +21,11 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      AUTH0_DOMAIN: '${env:AUTH0_DOMAIN}',
+      AUTH0_AUDIENCE: '${env:AUTH0_AUDIENCE}',
+      AUTH0_NAMESPACE: '${env:AUTH0_NAMESPACE}',
+      AUTH0_CLIENT_ID: '${env:AUTH0_CLIENT_ID}',
+      AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
     },
     lambdaHashingVersion: '20201221',
   },
