@@ -9,6 +9,7 @@ export const main = async (
   event: APIGatewayTokenAuthorizerEvent
 ): Promise<CustomAuthorizerResult> => {
   try {
+    console.log('called authorizer');
     const jwtToken = await verifyToken(event.authorizationToken);
 
     return {
@@ -25,6 +26,7 @@ export const main = async (
       },
     };
   } catch (e) {
+    console.log('error', e);
     return {
       principalId: 'user',
       policyDocument: {
