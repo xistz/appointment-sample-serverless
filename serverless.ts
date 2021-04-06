@@ -1,4 +1,5 @@
 import auth from '@functions/auth';
+import getAvailabilities from '@functions/getAvailabilities';
 import register from '@functions/register';
 import type { AWS } from '@serverless/typescript';
 
@@ -30,7 +31,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { register, auth },
+  functions: { register, auth, getAvailabilities },
   resources: {
     Resources: {
       GatewayResponseDefault4XX: {
