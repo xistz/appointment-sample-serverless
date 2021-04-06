@@ -11,7 +11,7 @@ export default {
         cors: true,
         request: {
           parameters: {
-            queryStrings: {
+            querystrings: {
               from: true,
               to: true,
             },
