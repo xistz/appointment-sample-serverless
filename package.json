@@ -16,7 +16,8 @@
     "auth0": "^2.34.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.3",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",
