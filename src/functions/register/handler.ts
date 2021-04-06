@@ -1,6 +1,6 @@
 import {
   formatJSONResponse,
-  ValidatedEventAPIGatewayProxyEvent,
+  ValidatedEventBodyAPIGatewayProxyEvent,
 } from '@libs/apiGateway';
 import { getUser, User } from '@libs/Jwt';
 import { middyfy } from '@libs/lambda';
@@ -11,7 +11,7 @@ import schema from './schema';
 
 const logger = createLogger('registerFunction');
 
-const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+const register: ValidatedEventBodyAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
   const user = getUser(event.headers.Authorization);
