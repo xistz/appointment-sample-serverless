@@ -1,3 +1,4 @@
+import { createLogger } from '@libs/logger';
 import { verifyToken } from '@services/authorization';
 import {
   APIGatewayTokenAuthorizerEvent,
@@ -5,12 +6,15 @@ import {
 } from 'aws-lambda';
 import 'source-map-support/register';
 
+const logger = createLogger('authFunction');
+
 export const main = async (
   event: APIGatewayTokenAuthorizerEvent
 ): Promise<CustomAuthorizerResult> => {
+  logger.info('authorizing user');
   try {
-    console.log('called authorizer');
     const jwtToken = await verifyToken(event.authorizationToken);
+    logger.info('user authorized', jwtToken.sub);
 
     return {
       principalId: jwtToken.sub,
@@ -26,7 +30,7 @@ export const main = async (
       },
     };
   } catch (e) {
-    console.log('error', e);
+    logger.error('failed to authorized user', e);
     return {
       principalId: 'user',
       policyDocument: {

@@ -4,20 +4,18 @@ import {
 } from '@libs/apiGateway';
 import { getUser, User } from '@libs/Jwt';
 import { middyfy } from '@libs/lambda';
+import { createLogger } from '@libs/logger';
 import { registerUser } from '@services/user';
 import 'source-map-support/register';
 import schema from './schema';
 
+const logger = createLogger('registerFunction');
+
 const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
-  console.log('register called');
-  console.log('authorization header', event.headers.Authorization);
   const user = getUser(event.headers.Authorization);
   const { role } = event.body;
-
-  console.info(role);
-  console.info(user);
 
   if (!isNewUser(user)) {
     return formatJSONResponse(
@@ -28,11 +26,9 @@ const register: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
     );
   }
 
-  console.log('registering new user');
+  logger.info(`registering new ${role}`);
 
   await registerUser(user.id, role);
-
-  console.log('registered new user');
 
   return formatJSONResponse({
     message: `registered as a ${role}`,
