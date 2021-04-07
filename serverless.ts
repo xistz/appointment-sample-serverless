@@ -51,6 +51,25 @@ const serverlessConfiguration: AWS = {
           },
         },
       },
+      ParameterRequestValidator: {
+        Type: 'AWS::ApiGateway::RequestValidator',
+        Properties: {
+          Name: 'ParameterRequestValidator',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+          ValidateRequestBody: false,
+          ValidateRequestParameters: true,
+        },
+      },
+      ApiGatewayMethodAvailabilitiesGet: {
+        Type: 'AWS::ApiGateway::Method',
+        Properties: {
+          RequestValidatorId: {
+            Ref: 'ParameterRequestValidator',
+          },
+        },
+      },
     },
   },
 };
