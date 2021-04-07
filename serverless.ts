@@ -75,7 +75,6 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::DynamoDB::Table',
         Properties: {
           AttributeDefinitions: [
-            { AttributeName: 'availabilityId', AttributeType: 'S' },
             {
               AttributeName: 'fpId',
               AttributeType: 'S',
@@ -84,11 +83,11 @@ const serverlessConfiguration: AWS = {
           ],
           KeySchema: [
             {
-              AttributeName: 'availabilityId',
+              AttributeName: 'fpId',
               KeyType: 'HASH',
             },
             {
-              AttributeName: 'fpId',
+              AttributeName: 'from',
               KeyType: 'RANGE',
             },
           ],
