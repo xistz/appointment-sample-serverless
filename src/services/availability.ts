@@ -14,13 +14,13 @@ export function listAvailabilities(
     {
       id: 'random_id_1',
       attributes: {
-        from: new Date(2020, 3, 7, 10).toISOString(),
+        from: new Date(2020, 3, 7, 1).toISOString(),
       },
     },
     {
       id: 'random_id_2',
       attributes: {
-        from: new Date(2020, 3, 7, 10, 30).toISOString(),
+        from: new Date(2020, 3, 7, 1, 30).toISOString(),
       },
     },
   ];
