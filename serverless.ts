@@ -28,6 +28,7 @@ const serverlessConfiguration: AWS = {
       AUTH0_NAMESPACE: '${env:AUTH0_NAMESPACE}',
       AUTH0_CLIENT_ID: '${env:AUTH0_CLIENT_ID}',
       AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
+      AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
     },
     lambdaHashingVersion: '20201221',
   },
@@ -68,6 +69,31 @@ const serverlessConfiguration: AWS = {
           RequestValidatorId: {
             Ref: 'ParameterRequestValidator',
           },
+        },
+      },
+      availabilitiesTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          AttributeDefinitions: [
+            { AttributeName: 'availabilityId', AttributeType: 'S' },
+            {
+              AttributeName: 'fpId',
+              AttributeType: 'S',
+            },
+            { AttributeName: 'from', AttributeType: 'S' },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'availabilityId',
+              KeyType: 'HASH',
+            },
+            {
+              AttributeName: 'fpId',
+              KeyType: 'RANGE',
+            },
+          ],
+          TableName: '${self:provider.environment.AVAILABILITIES_TABLE}',
+          BillingMode: 'PAY_PER_REQUEST',
         },
       },
     },
