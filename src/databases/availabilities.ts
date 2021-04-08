@@ -59,7 +59,7 @@ export class AvailabilitiesDB {
     return (items as unknown) as Availability[];
   }
 
-  async delete(id: string, fpId: string): Promise<Availability['id']> {
+  async delete(id: string, fpId: string): Promise<void> {
     this.logger.info('deleting availability');
 
     const params: DeleteItemCommandInput = {
@@ -71,7 +71,5 @@ export class AvailabilitiesDB {
     };
 
     await this.docClient.send(new DeleteItemCommand(params));
-
-    return id;
   }
 }
