@@ -1,4 +1,6 @@
 import {
+  DeleteItemCommand,
+  DeleteItemCommandInput,
   DynamoDBClient,
   PutItemCommand,
   PutItemCommandInput,
@@ -18,7 +20,7 @@ export class AvailabilitiesDB {
     private readonly availabilitiesTable = process.env.AVAILABILITIES_TABLE
   ) {}
 
-  async createAvailability(fpId: string, from: string): Promise<string> {
+  async create(fpId: string, from: string): Promise<Availability['id']> {
     this.logger.info('creating availability');
 
     const id = uuidv4();
@@ -38,11 +40,7 @@ export class AvailabilitiesDB {
     return id;
   }
 
-  async listAvailabilities(
-    fpId: string,
-    from: string,
-    to: string
-  ): Promise<Availability[]> {
+  async list(fpId: string, from: string, to: string): Promise<Availability[]> {
     this.logger.info('listing availabilities');
 
     const params: QueryCommandInput = {
@@ -59,5 +57,21 @@ export class AvailabilitiesDB {
     const items = result.Items;
 
     return (items as unknown) as Availability[];
+  }
+
+  async delete(id: string, fpId: string): Promise<Availability['id']> {
+    this.logger.info('deleting availability');
+
+    const params: DeleteItemCommandInput = {
+      TableName: this.availabilitiesTable,
+      Key: {
+        id: { S: id },
+        fpId: { S: fpId },
+      },
+    };
+
+    await this.docClient.send(new DeleteItemCommand(params));
+
+    return id;
   }
 }
