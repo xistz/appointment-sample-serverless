@@ -1,5 +1,12 @@
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/client-dynamodb';
 import { createLogger } from '@libs/logger';
+import { Availability } from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
 
 export class AvailabilitiesDB {
@@ -15,7 +22,7 @@ export class AvailabilitiesDB {
     this.logger.info('creating availability');
 
     const id = uuidv4();
-    const params = {
+    const params: PutItemCommandInput = {
       TableName: this.availabilitiesTable,
       Item: {
         id: { S: id },
@@ -29,5 +36,28 @@ export class AvailabilitiesDB {
     this.logger.info('availability created', data);
 
     return id;
+  }
+
+  async listAvailabilities(
+    fpId: string,
+    from: string,
+    to: string
+  ): Promise<Availability[]> {
+    this.logger.info('listing availabilities');
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression: 'fpId = :fpId and from between :from and :to',
+      ExpressionAttributeValues: {
+        ':fpId': { S: fpId },
+        ':from': { S: from },
+        ':to': { S: to },
+      },
+      TableName: this.availabilitiesTable,
+    };
+
+    const result = await this.docClient.send(new QueryCommand(params));
+    const items = result.Items;
+
+    return (items as unknown) as Availability[];
   }
 }
