@@ -10,9 +10,6 @@ export default {
         path: 'availabilities',
         cors: true,
         request: {
-          // schemas: {
-          //   'params-only': schema,
-          // },
           parameters: {
             querystrings: {
               from: true,
