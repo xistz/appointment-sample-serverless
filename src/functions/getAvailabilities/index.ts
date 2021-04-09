@@ -20,6 +20,7 @@ export default {
       },
     },
   ],
+  iamRoleStatementsName: 'getAvailabilities-role',
   iamRoleStatements: [
     {
       Effect: 'Allow',
