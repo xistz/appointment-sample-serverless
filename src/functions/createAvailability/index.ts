@@ -12,13 +12,7 @@ export default {
         cors: true,
         request: {
           schemas: {
-            'params-only': schema,
-          },
-          parameters: {
-            querystrings: {
-              from: true,
-              to: true,
-            },
+            'application/json': schema,
           },
         },
       },
