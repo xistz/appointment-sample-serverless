@@ -3,7 +3,7 @@ import { AvailabilitiesDB } from '@databases/availabilities';
 
 const availabilitiesDB = new AvailabilitiesDB();
 
-export async function listAvailabilities(
+export async function getAvailabilities(
   fpId: string,
   from: string,
   to: string
