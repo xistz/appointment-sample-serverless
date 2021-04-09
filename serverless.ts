@@ -29,6 +29,7 @@ const serverlessConfiguration: AWS = {
       AUTH0_CLIENT_ID: '${env:AUTH0_CLIENT_ID}',
       AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
       AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
+      AVAILABILITIES_ID_INDEX: 'AvailabilitiesIdIndex',
       AWS_REGION: '${self:provider.region}',
     },
     lambdaHashingVersion: '20201221',
@@ -77,6 +78,10 @@ const serverlessConfiguration: AWS = {
         Properties: {
           AttributeDefinitions: [
             {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+            {
               AttributeName: 'fpId',
               AttributeType: 'S',
             },
@@ -94,6 +99,24 @@ const serverlessConfiguration: AWS = {
           ],
           TableName: '${self:provider.environment.AVAILABILITIES_TABLE}',
           BillingMode: 'PAY_PER_REQUEST',
+          GlobalSecondaryIndexes: [
+            {
+              IndexName: '${self:provider.environment.AVAILABILITIES_ID_INDEX}',
+              KeySchema: [
+                {
+                  AttributeName: 'id',
+                  KeyType: 'HASH',
+                },
+                {
+                  AttributeName: 'fpId',
+                  KeyType: 'RANGE',
+                },
+              ],
+              Projection: {
+                ProjectionType: 'ALL',
+              },
+            },
+          ],
         },
       },
     },
