@@ -44,7 +44,10 @@ export class AvailabilitiesDB {
     this.logger.info('listing availabilities');
 
     const params: QueryCommandInput = {
-      KeyConditionExpression: 'fpId = :fpId and from between :from and :to',
+      KeyConditionExpression: 'fpId = :fpId and #from between :from and :to',
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
       ExpressionAttributeValues: {
         ':fpId': { S: fpId },
         ':from': { S: from },
