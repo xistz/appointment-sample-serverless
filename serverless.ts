@@ -31,7 +31,6 @@ const serverlessConfiguration: AWS = {
       AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
       AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
       AVAILABILITIES_ID_INDEX: 'AvailabilitiesIdIndex',
-      AWS_REGION: '${self:provider.region}',
     },
     lambdaHashingVersion: '20201221',
   },
