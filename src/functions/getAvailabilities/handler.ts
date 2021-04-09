@@ -2,7 +2,7 @@ import {
   formatJSONResponse,
   ValidatedEventQueryAPIGatewayProxyEvent,
 } from '@libs/apiGateway';
-import { getUser, User } from '@libs/Jwt';
+import { getUser, isFP } from '@libs/Jwt';
 import { middyfy } from '@libs/lambda';
 import { createLogger } from '@libs/logger';
 import { getAvailabilities } from '@services/availability';
@@ -34,6 +34,3 @@ const handler: ValidatedEventQueryAPIGatewayProxyEvent<typeof schema> = async (
 };
 
 export const main = middyfy(handler);
-
-const isFP = (user: User) =>
-  user.roles.length === 1 && user.roles[0] === 'financial planner';

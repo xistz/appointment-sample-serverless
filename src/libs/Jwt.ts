@@ -50,3 +50,6 @@ export function getToken(authHeader: string): string {
 
   return token;
 }
+
+export const isFP = (user: User) =>
+  user.roles.length === 1 && user.roles[0] === 'financial planner';
