@@ -1,4 +1,5 @@
 import { handlerPath } from '@libs/handlerResolver';
+import schema from './schema';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
@@ -6,13 +7,13 @@ export default {
     {
       http: {
         authorizer: 'auth',
-        method: 'get',
+        method: 'post',
         path: 'availabilities',
         cors: true,
         request: {
-          // schemas: {
-          //   'params-only': schema,
-          // },
+          schemas: {
+            'params-only': schema,
+          },
           parameters: {
             querystrings: {
               from: true,
