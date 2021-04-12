@@ -27,6 +27,17 @@ export type ValidatedEventQueryAPIGatewayProxyEvent<S> = Handler<
   APIGatewayProxyResult
 >;
 
+type ValidatedPathAPIGatewayProxyEvent<S> = Omit<
+  APIGatewayProxyEvent,
+  'pathParameters'
+> & {
+  pathParameters: FromSchema<S>;
+};
+export type ValidatedEventPathAPIGatewayProxyEvent<S> = Handler<
+  ValidatedPathAPIGatewayProxyEvent<S>,
+  APIGatewayProxyResult
+>;
+
 export const formatJSONResponse = (
   response: Record<string, unknown>,
   statusCode: number = 200
