@@ -80,14 +80,14 @@ const serverlessConfiguration: AWS = {
           },
         },
       },
-      ApiGatewayMethodAvailabilityDelete: {
-        Type: 'AWS::ApiGateway::Method',
-        Properties: {
-          RequestValidatorId: {
-            Ref: 'ParameterRequestValidator',
-          },
-        },
-      },
+      // ApiGatewayMethodAvailabilityDelete: {
+      //   Type: 'AWS::ApiGateway::Method',
+      //   Properties: {
+      //     RequestValidatorId: {
+      //       Ref: 'ParameterRequestValidator',
+      //     },
+      //   },
+      // },
       availabilitiesTable: {
         Type: 'AWS::DynamoDB::Table',
         Properties: {
