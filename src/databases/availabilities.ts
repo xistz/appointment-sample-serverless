@@ -23,10 +23,10 @@ export class AvailabilitiesDB {
 
   async create(fpId: string, from: string): Promise<Availability['id']> {
     this.logger.info('creating availability');
-    this.logger.info('from', from);
+    this.logger.info(`from ${from}`;
     const date = new Date(from);
-    this.logger.info('date.toISOString()', date.toISOString());
-    this.logger.info('formatISO()', formatISO(date));
+    this.logger.info(`date.toISOString() ${date.toISOString()}`);
+    this.logger.info(`formatISO() ${formatISO(date)}`);
 
     const id = uuidv4();
     const params: PutItemCommandInput = {
