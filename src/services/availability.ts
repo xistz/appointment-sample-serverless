@@ -20,8 +20,14 @@ export async function getAvailabilities(
   //     from: new Date(2021, 3, 7, 1, 30).toISOString(),
   //   },
   // ];
+  const parsedFrom = new Date(from).toISOString();
+  const parsedTo = new Date(to).toISOString();
 
-  const availabilities = await availabilitiesDB.list(fpId, from, to);
+  const availabilities = await availabilitiesDB.list(
+    fpId,
+    parsedFrom,
+    parsedTo
+  );
 
   return availabilities;
 }
