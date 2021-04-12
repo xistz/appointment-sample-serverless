@@ -37,7 +37,7 @@ export class AvailabilitiesDB {
 
     const data = await this.docClient.send(new PutItemCommand(params));
 
-    this.logger.info('availability created', data);
+    this.logger.info(`availability created ${data}`);
 
     return id;
   }
@@ -67,7 +67,7 @@ export class AvailabilitiesDB {
 
       return (items as unknown) as Availability[];
     } catch (error) {
-      this.logger.error('error listing availabilities', error);
+      this.logger.error(`error listing availabilities ${error}`);
       return [];
     }
   }
@@ -88,7 +88,7 @@ export class AvailabilitiesDB {
     try {
       await this.docClient.send(new DeleteItemCommand(params));
     } catch (error) {
-      this.logger.error('could not delete availability', error);
+      this.logger.error(`could not delete availability ${error}`);
     }
   }
 }
