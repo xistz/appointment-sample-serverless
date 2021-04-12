@@ -37,7 +37,7 @@ export class AvailabilitiesDB {
 
     const data = await this.docClient.send(new PutItemCommand(params));
 
-    this.logger.info(`availability created ${data}`);
+    this.logger.info(`availability created ${JSON.stringify(data)}`);
 
     return id;
   }
