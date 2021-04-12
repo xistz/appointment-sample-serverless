@@ -79,7 +79,10 @@ export class AvailabilitiesDB {
         fpId: { S: fpId },
       },
     };
-
-    await this.docClient.send(new DeleteItemCommand(params));
+    try {
+      await this.docClient.send(new DeleteItemCommand(params));
+    } catch (error) {
+      this.logger.error('could not delete availability', error.message);
+    }
   }
 }
