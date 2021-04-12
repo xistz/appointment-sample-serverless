@@ -17,7 +17,9 @@ export class AvailabilitiesDB {
       region: process.env.AWS_REGION,
     }),
     private readonly logger = createLogger('AvailabilitiesDB'),
-    private readonly availabilitiesTable = process.env.AVAILABILITIES_TABLE
+    private readonly availabilitiesTable = process.env.AVAILABILITIES_TABLE,
+    private readonly availabilitiesFpIdFromIndex = process.env
+      .AVAILABILITIES_FP_ID_FROM_INDEX
   ) {}
 
   async create(fpId: string, from: string): Promise<Availability['id']> {
@@ -45,6 +47,7 @@ export class AvailabilitiesDB {
 
     const params: QueryCommandInput = {
       KeyConditionExpression: 'fpId = :fpId and #from between :from and :to',
+      IndexName: this.availabilitiesFpIdFromIndex,
       ExpressionAttributeNames: {
         '#from': 'from',
       },

@@ -31,7 +31,7 @@ const serverlessConfiguration: AWS = {
       AUTH0_CLIENT_ID: '${env:AUTH0_CLIENT_ID}',
       AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
       AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
-      AVAILABILITIES_ID_INDEX: 'AvailabilitiesIdIndex',
+      AVAILABILITIES_FP_ID_FROM_INDEX: 'AvailabilitiesFpIdFromIndex',
     },
     lambdaHashingVersion: '20201221',
   },
@@ -96,21 +96,13 @@ const serverlessConfiguration: AWS = {
               AttributeName: 'id',
               AttributeType: 'S',
             },
-            // {
-            //   AttributeName: 'fpId',
-            //   AttributeType: 'S',
-            // },
-            // { AttributeName: 'from', AttributeType: 'S' },
+            {
+              AttributeName: 'fpId',
+              AttributeType: 'S',
+            },
+            { AttributeName: 'from', AttributeType: 'S' },
           ],
           KeySchema: [
-            // {
-            //   AttributeName: 'fpId',
-            //   KeyType: 'HASH',
-            // },
-            // {
-            //   AttributeName: 'from',
-            //   KeyType: 'RANGE',
-            // },
             {
               AttributeName: 'id',
               KeyType: 'HASH',
@@ -118,24 +110,25 @@ const serverlessConfiguration: AWS = {
           ],
           TableName: '${self:provider.environment.AVAILABILITIES_TABLE}',
           BillingMode: 'PAY_PER_REQUEST',
-          // GlobalSecondaryIndexes: [
-          //   {
-          //     IndexName: '${self:provider.environment.AVAILABILITIES_ID_INDEX}',
-          //     KeySchema: [
-          //       {
-          //         AttributeName: 'id',
-          //         KeyType: 'HASH',
-          //       },
-          //       {
-          //         AttributeName: 'fpId',
-          //         KeyType: 'RANGE',
-          //       },
-          //     ],
-          //     Projection: {
-          //       ProjectionType: 'ALL',
-          //     },
-          //   },
-          // ],
+          GlobalSecondaryIndexes: [
+            {
+              IndexName:
+                '${self:provider.environment.AVAILABILITIES_FP_ID_FROM_INDEX}',
+              KeySchema: [
+                {
+                  AttributeName: 'fpId',
+                  KeyType: 'HASH',
+                },
+                {
+                  AttributeName: 'from',
+                  KeyType: 'RANGE',
+                },
+              ],
+              Projection: {
+                ProjectionType: 'ALL',
+              },
+            },
+          ],
         },
       },
     },
