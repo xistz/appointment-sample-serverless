@@ -7,6 +7,7 @@ import {
   QueryCommand,
   QueryCommandInput,
 } from '@aws-sdk/client-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
 import { Availability } from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
@@ -28,16 +29,16 @@ export class AvailabilitiesDB {
     const id = uuidv4();
     const params: PutItemCommandInput = {
       TableName: this.availabilitiesTable,
-      Item: {
-        id: { S: id },
-        fpId: { S: fpId },
-        from: { S: from },
-      },
+      Item: marshall({
+        id,
+        fpId,
+        from,
+      }),
     };
 
-    const data = await this.docClient.send(new PutItemCommand(params));
+    await this.docClient.send(new PutItemCommand(params));
 
-    this.logger.info(`availability created ${JSON.stringify(data)}`);
+    this.logger.info('availability created');
 
     return id;
   }
@@ -61,9 +62,7 @@ export class AvailabilitiesDB {
 
     try {
       const result = await this.docClient.send(new QueryCommand(params));
-      const items = result.Items;
-
-      this.logger.info(`availabilities ${result.Items}`);
+      const items = result.Items.map((item) => unmarshall(item));
 
       return (items as unknown) as Availability[];
     } catch (error) {
