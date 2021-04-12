@@ -96,42 +96,46 @@ const serverlessConfiguration: AWS = {
               AttributeName: 'id',
               AttributeType: 'S',
             },
-            {
-              AttributeName: 'fpId',
-              AttributeType: 'S',
-            },
-            { AttributeName: 'from', AttributeType: 'S' },
+            // {
+            //   AttributeName: 'fpId',
+            //   AttributeType: 'S',
+            // },
+            // { AttributeName: 'from', AttributeType: 'S' },
           ],
           KeySchema: [
+            // {
+            //   AttributeName: 'fpId',
+            //   KeyType: 'HASH',
+            // },
+            // {
+            //   AttributeName: 'from',
+            //   KeyType: 'RANGE',
+            // },
             {
-              AttributeName: 'fpId',
+              AttributeName: 'id',
               KeyType: 'HASH',
-            },
-            {
-              AttributeName: 'from',
-              KeyType: 'RANGE',
             },
           ],
           TableName: '${self:provider.environment.AVAILABILITIES_TABLE}',
           BillingMode: 'PAY_PER_REQUEST',
-          GlobalSecondaryIndexes: [
-            {
-              IndexName: '${self:provider.environment.AVAILABILITIES_ID_INDEX}',
-              KeySchema: [
-                {
-                  AttributeName: 'id',
-                  KeyType: 'HASH',
-                },
-                {
-                  AttributeName: 'fpId',
-                  KeyType: 'RANGE',
-                },
-              ],
-              Projection: {
-                ProjectionType: 'ALL',
-              },
-            },
-          ],
+          // GlobalSecondaryIndexes: [
+          //   {
+          //     IndexName: '${self:provider.environment.AVAILABILITIES_ID_INDEX}',
+          //     KeySchema: [
+          //       {
+          //         AttributeName: 'id',
+          //         KeyType: 'HASH',
+          //       },
+          //       {
+          //         AttributeName: 'fpId',
+          //         KeyType: 'RANGE',
+          //       },
+          //     ],
+          //     Projection: {
+          //       ProjectionType: 'ALL',
+          //     },
+          //   },
+          // ],
         },
       },
     },
