@@ -76,7 +76,10 @@ export class AvailabilitiesDB {
       TableName: this.availabilitiesTable,
       Key: {
         id: { S: id },
-        fpId: { S: fpId },
+      },
+      ConditionExpression: 'fpId = :fpId',
+      ExpressionAttributeValues: {
+        ':fpId': { S: fpId },
       },
     };
     try {
