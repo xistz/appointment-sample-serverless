@@ -7,7 +7,7 @@ export default {
       http: {
         authorizer: 'auth',
         method: 'delete',
-        path: 'availabilities/${id}',
+        path: 'availabilities/{id}',
         cors: true,
         request: {
           parameters: {
