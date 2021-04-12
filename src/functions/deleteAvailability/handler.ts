@@ -30,7 +30,7 @@ const handler: ValidatedEventPathAPIGatewayProxyEvent<typeof schema> = async (
 
   await deleteAvailability(id, user.id);
 
-  return formatJSONResponse({ data: { id } });
+  return formatJSONResponse({ id });
 };
 
 export const main = middyfy(handler);
