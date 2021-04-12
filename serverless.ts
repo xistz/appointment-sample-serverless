@@ -1,6 +1,7 @@
 import auth from '@functions/auth';
 import getAvailabilities from '@functions/getAvailabilities';
 import createAvailability from '@functions/createAvailability';
+import deleteAvailability from '@functions/deleteAvailability';
 import register from '@functions/register';
 import type { AWS } from '@serverless/typescript';
 
@@ -35,7 +36,13 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { register, auth, getAvailabilities, createAvailability },
+  functions: {
+    register,
+    auth,
+    getAvailabilities,
+    createAvailability,
+    deleteAvailability,
+  },
   resources: {
     Resources: {
       GatewayResponseDefault4XX: {
@@ -66,6 +73,14 @@ const serverlessConfiguration: AWS = {
         },
       },
       ApiGatewayMethodAvailabilitiesGet: {
+        Type: 'AWS::ApiGateway::Method',
+        Properties: {
+          RequestValidatorId: {
+            Ref: 'ParameterRequestValidator',
+          },
+        },
+      },
+      ApiGatewayMethodAvailabilityDelete: {
         Type: 'AWS::ApiGateway::Method',
         Properties: {
           RequestValidatorId: {
