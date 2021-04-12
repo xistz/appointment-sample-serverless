@@ -26,7 +26,7 @@ const handler: ValidatedEventBodyAPIGatewayProxyEvent<typeof schema> = async (
     );
   }
 
-  logger.info(`creating availability for financial planner`);
+  logger.info(`creating availability ${from} for financial planner`);
 
   const id = await createAvailability(user.id, from);
 
