@@ -30,7 +30,9 @@ export async function createAvailability(
   fpId: string,
   from: string
 ): Promise<Availability['id']> {
-  const id = await availabilitiesDB.create(fpId, from);
+  const parsedFrom = new Date(from).toISOString();
+
+  const id = await availabilitiesDB.create(fpId, parsedFrom);
 
   return id;
 }

@@ -10,7 +10,6 @@ import {
 import { createLogger } from '@libs/logger';
 import { Availability } from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
-import { formatISO } from 'date-fns';
 
 export class AvailabilitiesDB {
   constructor(
@@ -22,11 +21,7 @@ export class AvailabilitiesDB {
   ) {}
 
   async create(fpId: string, from: string): Promise<Availability['id']> {
-    this.logger.info('creating availability');
-    this.logger.info(`from ${from}`);
-    const date = new Date(from);
-    this.logger.info(`date.toISOString() ${date.toISOString()}`);
-    this.logger.info(`formatISO() ${formatISO(date)}`);
+    this.logger.info(`creating availability ${from}`);
 
     const id = uuidv4();
     const params: PutItemCommandInput = {
