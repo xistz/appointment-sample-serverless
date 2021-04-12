@@ -63,7 +63,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items;
 
-      this.logger.info('availabilities', result.Items);
+      this.logger.info(`availabilities ${result.Items}`);
 
       return (items as unknown) as Availability[];
     } catch (error) {
