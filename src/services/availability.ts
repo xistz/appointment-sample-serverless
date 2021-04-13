@@ -37,3 +37,17 @@ export async function deleteAvailability(
 ): Promise<void> {
   await availabilitiesDB.delete(id, fpId);
 }
+
+export async function searchAvailabilitiesByDate(
+  from: string,
+  to: string,
+  clientId: string
+): Promise<Availability[]> {
+  return [];
+}
+
+export async function searchAvailabilitiesByTime(
+  at: string
+): Promise<Availability[]> {
+  return [];
+}
