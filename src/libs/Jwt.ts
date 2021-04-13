@@ -53,3 +53,6 @@ export function getToken(authHeader: string): string {
 
 export const isFP = (user: User) =>
   user.roles.length === 1 && user.roles[0] === 'financial planner';
+
+export const isClient = (user: User) =>
+  user.roles.length === 1 && user.roles[0] === 'client';
