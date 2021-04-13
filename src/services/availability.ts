@@ -8,18 +8,6 @@ export async function getAvailabilities(
   from: string,
   to: string
 ): Promise<Availability[]> {
-  // return [
-  //   {
-  //     id: 'random_id_1',
-  //     fpId: 'random_fp_id',
-  //     from: new Date(2021, 3, 7, 1).toISOString(),
-  //   },
-  //   {
-  //     id: 'random_id_2',
-  //     fpId: 'random_fp_id',
-  //     from: new Date(2021, 3, 7, 1, 30).toISOString(),
-  //   },
-  // ];
   const parsedFrom = new Date(from).toISOString();
   const parsedTo = new Date(to).toISOString();
 
