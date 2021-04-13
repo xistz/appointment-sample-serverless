@@ -16,7 +16,6 @@
     "@middy/http-cors": "^2.0.0",
     "@middy/http-json-body-parser": "^1.5.2",
     "auth0": "^2.34.0",
-    "date-fns": "^2.20.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.12.3",
     "serverless-iam-roles-per-function": "^3.1.0",
