@@ -5,6 +5,7 @@ import {
   listAvailabilities,
   searchAvailabilities,
 } from '@functions/availabilities';
+import { createAppointment } from '@functions/appointments';
 import register from '@functions/register';
 import type { AWS } from '@serverless/typescript';
 
@@ -46,6 +47,7 @@ const serverlessConfiguration: AWS = {
     deleteAvailability,
     listAvailabilities,
     searchAvailabilities,
+    createAppointment,
   },
   resources: {
     Resources: {
