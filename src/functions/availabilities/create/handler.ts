@@ -30,7 +30,7 @@ const handler: ValidatedEventBodyAPIGatewayProxyEvent<typeof schema> = async (
 
   const id = await createAvailability(user.id, from);
 
-  return formatJSONResponse({ id });
+  return formatJSONResponse({ id }, 201);
 };
 
 export const main = middyfy(handler);
