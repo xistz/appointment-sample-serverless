@@ -28,9 +28,9 @@ const handler: ValidatedEventBodyAPIGatewayProxyEvent<typeof schema> = async (
 
   logger.info(`creating appointment for availability ${availability_id}`);
 
-  const id = await createAppointment(user.id, availability_id);
+  await createAppointment(user.id, availability_id);
 
-  return formatJSONResponse({ id }, 201);
+  return formatJSONResponse({ message: 'created appointment' }, 201);
 };
 
 export const main = middyfy(handler);

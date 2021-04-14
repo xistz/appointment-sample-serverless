@@ -5,8 +5,6 @@ const availabilitiesDB = new AvailabilitiesDB();
 export async function createAppointment(
   clientId: string,
   availabilityId: string
-): Promise<string> {
-  const id = '';
-
-  return id;
+): Promise<void> {
+  await availabilitiesDB.createAppointment(availabilityId, clientId);
 }
