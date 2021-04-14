@@ -8,3 +8,10 @@ export async function createAppointment(
 ): Promise<void> {
   await availabilitiesDB.createAppointment(availabilityId, clientId);
 }
+
+export async function deleteAppointment(
+  availabilityId: string,
+  userId: string
+): Promise<void> {
+  await availabilitiesDB.deleteAppointment(availabilityId, userId);
+}
