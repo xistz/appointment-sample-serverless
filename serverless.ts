@@ -1,7 +1,10 @@
 import auth from '@functions/auth';
-import getAvailabilities from '@functions/getAvailabilities';
-import createAvailability from '@functions/createAvailability';
-import deleteAvailability from '@functions/deleteAvailability';
+import {
+  createAvailability,
+  deleteAvailability,
+  listAvailabilities,
+  searchAvailabilities,
+} from '@functions/availabilities';
 import register from '@functions/register';
 import type { AWS } from '@serverless/typescript';
 
@@ -39,9 +42,10 @@ const serverlessConfiguration: AWS = {
   functions: {
     register,
     auth,
-    getAvailabilities,
     createAvailability,
     deleteAvailability,
+    listAvailabilities,
+    searchAvailabilities,
   },
   resources: {
     Resources: {
