@@ -1,11 +1,13 @@
 import {
-  DeleteItemCommand,
-  DeleteItemCommandInput,
   DynamoDBClient,
   PutItemCommand,
   PutItemCommandInput,
+  DeleteItemCommand,
+  DeleteItemCommandInput,
   QueryCommand,
   QueryCommandInput,
+  UpdateItemCommand,
+  UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
@@ -89,5 +91,42 @@ export class AvailabilitiesDB {
     } catch (error) {
       this.logger.error(`could not delete availability ${error}`);
     }
+  }
+
+  async createAppointment(id: string, clientId: string): Promise<void> {
+    this.logger.info('creating appointment');
+
+    const params: UpdateItemCommandInput = {
+      TableName: this.availabilitiesTable,
+      Key: {
+        id: { S: id },
+      },
+      UpdateExpression: 'set clientId = :clientId',
+      ExpressionAttributeValues: {
+        ':clientId': { S: clientId },
+      },
+      ConditionExpression: 'attribute_not_exists(clientId)',
+    };
+
+    await this.docClient.send(new UpdateItemCommand(params));
+  }
+
+  async deleteAppointment(id: string, userId: string): Promise<void> {
+    this.logger.info('deleting appointment');
+
+    const params: UpdateItemCommandInput = {
+      TableName: this.availabilitiesTable,
+      Key: {
+        id: { S: id },
+      },
+      UpdateExpression: 'remove clientId',
+      ConditionExpression:
+        'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
+      ExpressionAttributeValues: {
+        ':userId': { S: userId },
+      },
+    };
+
+    await this.docClient.send(new UpdateItemCommand(params));
   }
 }
