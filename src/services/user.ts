@@ -1,4 +1,5 @@
 import { GetUsersData, ManagementClient, ObjectWithId, RolesData } from 'auth0';
+import { User } from '@models/user';
 
 const auth0 = new ManagementClient({
   domain: `${process.env.AUTH0_DOMAIN}`,
@@ -35,7 +36,7 @@ export async function getUsers(userIds: string[]) {
   };
   const users = await auth0.getUsers(params);
 
-  const results = users.reduce((result, user) => {
+  const results = users.reduce<{ [key: string]: User }>((result, user) => {
     const { name, picture, user_id: userId } = user;
     result[userId] = {
       userId,
