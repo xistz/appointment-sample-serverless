@@ -109,6 +109,7 @@ const serverlessConfiguration: AWS = {
               AttributeType: 'S',
             },
             { AttributeName: 'from', AttributeType: 'S' },
+            { AttributeName: 'clientId', AttributeType: 'S' },
           ],
           KeySchema: [
             {
