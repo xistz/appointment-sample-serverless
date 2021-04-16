@@ -145,12 +145,8 @@ const serverlessConfiguration: AWS = {
                   KeyType: 'HASH',
                 },
                 {
-                  AttributeName: 'fpId',
+                  AttributeName: 'fpId_clientId',
                   KeyType: 'RANGE',
-                },
-                {
-                  AttributeName: 'clientId',
-                  KeyType: 'Range',
                 },
               ],
               Projection: {
