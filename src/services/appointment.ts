@@ -24,9 +24,16 @@ export async function listAppointments(
   from: string,
   to: string
 ): Promise<AppointmentDetails[]> {
+  const parsedFrom = new Date(from).toISOString();
+  const parsedTo = new Date(to).toISOString();
+
   const appointments = isFP
-    ? await availabilitiesDB.listFpAppointments(userId, from, to)
-    : await availabilitiesDB.listClientAppointments(userId, from, to);
+    ? await availabilitiesDB.listFpAppointments(userId, parsedFrom, parsedTo)
+    : await availabilitiesDB.listClientAppointments(
+        userId,
+        parsedFrom,
+        parsedTo
+      );
 
   console.info('listAppointments service before length', appointments);
 
