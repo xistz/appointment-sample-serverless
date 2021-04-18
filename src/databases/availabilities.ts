@@ -8,6 +8,8 @@ import {
   QueryCommandInput,
   UpdateItemCommand,
   UpdateItemCommandInput,
+  ScanCommand,
+  ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
@@ -81,8 +83,9 @@ export class AvailabilitiesDB {
   async listAvailableByDate(from: string, to: string): Promise<Availability[]> {
     this.logger.info('listing available availabilities');
 
-    const params: QueryCommandInput = {
-      KeyConditionExpression: '#from between :from and :to',
+    const params: ScanCommandInput = {
+      FilterExpression:
+        '(#from between :from and :to) and attribute_not_exists(clientId)',
       ExpressionAttributeNames: {
         '#from': 'from',
       },
@@ -90,12 +93,11 @@ export class AvailabilitiesDB {
         ':from': { S: from },
         ':to': { S: to },
       },
-      FilterExpression: 'attribute_not_exists(clientId)',
       TableName: this.availabilitiesTable,
     };
 
     try {
-      const result = await this.docClient.send(new QueryCommand(params));
+      const result = await this.docClient.send(new ScanCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
       return (items as unknown) as Availability[];
