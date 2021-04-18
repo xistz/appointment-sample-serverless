@@ -138,7 +138,7 @@ export class AvailabilitiesDB {
     from: string,
     to: string
   ): Promise<Appointment[]> {
-    this.logger.info('listing availabilities');
+    this.logger.info('listing clientAppointments');
 
     const params: QueryCommandInput = {
       KeyConditionExpression:
@@ -171,7 +171,7 @@ export class AvailabilitiesDB {
     from: string,
     to: string
   ): Promise<Appointment[]> {
-    this.logger.info('listing availabilities');
+    this.logger.info('listing financial planner appointments');
 
     const params: QueryCommandInput = {
       KeyConditionExpression: 'fpId = :fpId and #from between :from and :to',
