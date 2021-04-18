@@ -9,7 +9,7 @@ import { listAppointments } from '@services/appointment';
 import 'source-map-support/register';
 import schema from './schema';
 
-const logger = createLogger('getAppointmentsFunction');
+const logger = createLogger('listAppointmentsFunction');
 
 const handler: ValidatedEventQueryAPIGatewayProxyEvent<typeof schema> = async (
   event

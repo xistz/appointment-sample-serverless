@@ -20,7 +20,7 @@ export default {
       },
     },
   ],
-  iamRoleStatementsName: 'getAppointments-role',
+  iamRoleStatementsName: 'listAppointments-role',
   iamRoleStatements: [
     {
       Effect: 'Allow',
