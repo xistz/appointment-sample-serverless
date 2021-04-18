@@ -31,9 +31,7 @@ const handler: ValidatedEventQueryAPIGatewayProxyEvent<typeof schema> = async (
     );
   }
 
-  logger.info(
-    `getting availabilities for financial planner between ${from} and ${to}`
-  );
+  logger.info(`getting availabilities for client ${from} and ${to}`);
 
   let availabilities: Availability[];
 
