@@ -7,7 +7,7 @@ export default {
       http: {
         authorizer: 'auth',
         method: 'get',
-        path: 'availabilities',
+        path: 'availabilities/search',
         cors: true,
         request: {
           parameters: {
