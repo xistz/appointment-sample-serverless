@@ -25,7 +25,9 @@ export class AvailabilitiesDB {
     private readonly availabilitiesFpIdFromIndex = process.env
       .AVAILABILITIES_FP_ID_FROM_INDEX,
     private readonly availabilitiesClientIdFromIndex = process.env
-      .AVAILABILITIES_CLIENT_ID_FROM_INDEX
+      .AVAILABILITIES_CLIENT_ID_FROM_INDEX,
+    private readonly availabilitiesFromIndex = process.env
+      .AVAILABILITIES_FROM_INDEX
   ) {}
 
   async create(fpId: string, from: string): Promise<Availability['id']> {
@@ -74,6 +76,29 @@ export class AvailabilitiesDB {
       this.logger.error(`error listing availabilities ${error}`);
       return [];
     }
+  }
+
+  async listAvailableByDate(from: string, to: string): Promise<Availability[]> {
+    this.logger.info('listing available availabilities');
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression: '#from between :from and :to',
+      IndexName: this.availabilitiesFromIndex,
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':from': { S: from },
+        ':to': { S: to },
+      },
+      FilterExpression: 'attribute_not_exists(clientId)',
+      TableName: this.availabilitiesTable,
+    };
+
+    const result = await this.docClient.send(new QueryCommand(params));
+    const items = result.Items.map((item) => unmarshall(item));
+
+    return (items as unknown) as Availability[];
   }
 
   async delete(id: string, fpId: string): Promise<void> {

@@ -43,7 +43,10 @@ export async function searchAvailabilitiesByDate(
   to: string,
   clientId: string
 ): Promise<Availability[]> {
-  return [];
+  const parsedFrom = new Date(from).toISOString();
+  const parsedTo = new Date(to).toISOString();
+
+  return await availabilitiesDB.listAvailableByDate(parsedFrom, parsedTo);
 }
 
 export async function searchAvailabilitiesByTime(
