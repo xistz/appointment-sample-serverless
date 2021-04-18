@@ -160,6 +160,19 @@ const serverlessConfiguration: AWS = {
                 ProjectionType: 'ALL',
               },
             },
+            {
+              IndexName:
+                '${self:provider.environment.AVAILABILITIES_FROM_INDEX}',
+              KeySchema: [
+                {
+                  AttributeName: 'from',
+                  KeyType: 'HASH',
+                },
+              ],
+              Projection: {
+                ProjectionType: 'ALL',
+              },
+            },
           ],
         },
       },
