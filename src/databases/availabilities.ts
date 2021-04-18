@@ -8,8 +8,6 @@ import {
   QueryCommandInput,
   UpdateItemCommand,
   UpdateItemCommandInput,
-  ScanCommand,
-  ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
@@ -76,33 +74,6 @@ export class AvailabilitiesDB {
       return (items as unknown) as Availability[];
     } catch (error) {
       this.logger.error(`error listing availabilities ${error}`);
-      return [];
-    }
-  }
-
-  async listAvailableByDate(from: string, to: string): Promise<Availability[]> {
-    this.logger.info('listing available availabilities');
-
-    const params: ScanCommandInput = {
-      FilterExpression:
-        '(#from between :from and :to) and attribute_not_exists(clientId)',
-      ExpressionAttributeNames: {
-        '#from': 'from',
-      },
-      ExpressionAttributeValues: {
-        ':from': { S: from },
-        ':to': { S: to },
-      },
-      TableName: this.availabilitiesTable,
-    };
-
-    try {
-      const result = await this.docClient.send(new ScanCommand(params));
-      const items = result.Items.map((item) => unmarshall(item));
-
-      return (items as unknown) as Availability[];
-    } catch (error) {
-      this.logger.error(`error listing available availabilities ${error}`);
       return [];
     }
   }
@@ -226,6 +197,32 @@ export class AvailabilitiesDB {
       return (items as unknown) as Appointment[];
     } catch (error) {
       this.logger.error(`error listing availabilities ${error}`);
+      return [];
+    }
+  }
+
+  async listAvailableByTime(at: string): Promise<Availability[]> {
+    this.logger.info(`listing available availabilities at ${at}`);
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression: '#from = :at',
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':at': { S: at },
+      },
+      TableName: this.availabilitiesTable,
+      IndexName: this.availabilitiesFromIndex,
+    };
+
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
+
+      return (items as unknown) as Availability[];
+    } catch (error) {
+      this.logger.error(`error listing available availabilities ${error}`);
       return [];
     }
   }
