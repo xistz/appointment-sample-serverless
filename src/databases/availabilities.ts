@@ -11,6 +11,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
+import { Appointment } from '@models/appointment';
 import { Availability } from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,7 +23,9 @@ export class AvailabilitiesDB {
     private readonly logger = createLogger('AvailabilitiesDB'),
     private readonly availabilitiesTable = process.env.AVAILABILITIES_TABLE,
     private readonly availabilitiesFpIdFromIndex = process.env
-      .AVAILABILITIES_FP_ID_FROM_INDEX
+      .AVAILABILITIES_FP_ID_FROM_INDEX,
+    private readonly availabilitiesClientIdFromIndex = process.env
+      .AVAILABILITIES_CLIENT_ID_FROM_INDEX
   ) {}
 
   async create(fpId: string, from: string): Promise<Availability['id']> {
@@ -128,5 +131,71 @@ export class AvailabilitiesDB {
     };
 
     await this.docClient.send(new UpdateItemCommand(params));
+  }
+
+  async listClientAppointments(
+    clientId: string,
+    from: string,
+    to: string
+  ): Promise<Appointment[]> {
+    this.logger.info('listing availabilities');
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression:
+        'clientId = :clientId and #from between :from and :to',
+      IndexName: this.availabilitiesClientIdFromIndex,
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':clientId': { S: clientId },
+        ':from': { S: from },
+        ':to': { S: to },
+      },
+      TableName: this.availabilitiesTable,
+    };
+
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
+
+      return (items as unknown) as Appointment[];
+    } catch (error) {
+      this.logger.error(`error listing availabilities ${error}`);
+      return [];
+    }
+  }
+
+  async listFpAppointments(
+    fpId: string,
+    from: string,
+    to: string
+  ): Promise<Appointment[]> {
+    this.logger.info('listing availabilities');
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression: 'fpId = :fpId and #from between :from and :to',
+      FilterExpression: 'attribute_exists(client_id)',
+      IndexName: this.availabilitiesFpIdFromIndex,
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':fpId': { S: fpId },
+        ':from': { S: from },
+        ':to': { S: to },
+      },
+      TableName: this.availabilitiesTable,
+    };
+
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
+
+      return (items as unknown) as Appointment[];
+    } catch (error) {
+      this.logger.error(`error listing availabilities ${error}`);
+      return [];
+    }
   }
 }
