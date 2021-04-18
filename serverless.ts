@@ -36,7 +36,7 @@ const serverlessConfiguration: AWS = {
       AUTH0_CLIENT_SECRET: '${env:AUTH0_CLIENT_SECRET}',
       AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
       AVAILABILITIES_FP_ID_FROM_INDEX: 'AvailabilitiesFpIdFromIndex',
-      APPOINTMENTS_INDEX: 'AppointmentsIndex',
+      AVAILABILITIES_CLIENT_ID_FROM_INDEX: 'AvailabilitiesClientIdFromIndex',
     },
     lambdaHashingVersion: '20201221',
   },
@@ -138,14 +138,15 @@ const serverlessConfiguration: AWS = {
               },
             },
             {
-              IndexName: '${self:provider.environment.APPOINTMENTS_INDEX}',
+              IndexName:
+                '${self:provider.environment.AVAILABILITIES_CLIENT_ID_FROM_INDEX}',
               KeySchema: [
                 {
-                  AttributeName: 'from',
+                  AttributeName: 'clientId',
                   KeyType: 'HASH',
                 },
                 {
-                  AttributeName: 'fpId_clientId',
+                  AttributeName: 'from',
                   KeyType: 'RANGE',
                 },
               ],
