@@ -95,10 +95,15 @@ export class AvailabilitiesDB {
       TableName: this.availabilitiesTable,
     };
 
-    const result = await this.docClient.send(new QueryCommand(params));
-    const items = result.Items.map((item) => unmarshall(item));
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
 
-    return (items as unknown) as Availability[];
+      return (items as unknown) as Availability[];
+    } catch (error) {
+      this.logger.error(`error listing available availabilities ${error}`);
+      return [];
+    }
   }
 
   async delete(id: string, fpId: string): Promise<void> {
