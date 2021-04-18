@@ -122,6 +122,10 @@ const serverlessConfiguration: AWS = {
               AttributeName: 'id',
               KeyType: 'HASH',
             },
+            {
+              AttributeName: 'from',
+              KeyType: 'RANGE',
+            },
           ],
           TableName: '${self:provider.environment.AVAILABILITIES_TABLE}',
           BillingMode: 'PAY_PER_REQUEST',
@@ -154,19 +158,6 @@ const serverlessConfiguration: AWS = {
                 {
                   AttributeName: 'from',
                   KeyType: 'RANGE',
-                },
-              ],
-              Projection: {
-                ProjectionType: 'ALL',
-              },
-            },
-            {
-              IndexName:
-                '${self:provider.environment.AVAILABILITIES_FROM_INDEX}',
-              KeySchema: [
-                {
-                  AttributeName: 'from',
-                  KeyType: 'HASH',
                 },
               ],
               Projection: {

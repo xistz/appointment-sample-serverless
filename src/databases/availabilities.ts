@@ -83,7 +83,6 @@ export class AvailabilitiesDB {
 
     const params: QueryCommandInput = {
       KeyConditionExpression: '#from between :from and :to',
-      IndexName: this.availabilitiesFromIndex,
       ExpressionAttributeNames: {
         '#from': 'from',
       },
