@@ -28,6 +28,10 @@ export async function listAppointments(
     ? await availabilitiesDB.listFpAppointments(userId, from, to)
     : await availabilitiesDB.listClientAppointments(userId, from, to);
 
+  if (appointments.length === 0) {
+    return [];
+  }
+
   const userIds = new Set<string>();
   appointments.forEach((appointment) =>
     userIds.add(appointment.clientId).add(appointment.fpId)
