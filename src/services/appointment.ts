@@ -20,14 +20,13 @@ export async function deleteAppointment(
 
 export async function listAppointments(
   userId: string,
+  isFP: boolean = false,
   from: string,
   to: string
 ): Promise<AppointmentDetails[]> {
-  const appointments = await availabilitiesDB.listAppointments(
-    userId,
-    from,
-    to
-  );
+  const appointments = isFP
+    ? await availabilitiesDB.listFpAppointments(userId, from, to)
+    : await availabilitiesDB.listClientAppointments(userId, from, to);
 
   const userIds = new Set<string>();
   appointments.forEach((appointment) =>
