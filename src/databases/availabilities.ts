@@ -43,7 +43,7 @@ export class AvailabilitiesDB {
         id,
         fpId,
         from,
-        available: true,
+        available: 'available',
       }),
     };
 
