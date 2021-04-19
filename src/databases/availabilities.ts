@@ -26,8 +26,8 @@ export class AvailabilitiesDB {
       .AVAILABILITIES_FP_ID_FROM_INDEX,
     private readonly availabilitiesClientIdFromIndex = process.env
       .AVAILABILITIES_CLIENT_ID_FROM_INDEX,
-    private readonly availabilitiesFromIndex = process.env
-      .AVAILABILITIES_FROM_INDEX
+    private readonly availabilitiesAvailableFromIndex = process.env
+      .AVAILABILITIES_AVAILABLE_FROM_INDEX
   ) {}
 
   async createAvailability(
@@ -209,29 +209,41 @@ export class AvailabilitiesDB {
     }
   }
 
-  async listAvailableByTime(at: string): Promise<Availability[]> {
-    this.logger.info(`listing available availabilities at ${at}`);
+  async listAvailabilitiesByDate(
+    from: string,
+    to: string
+  ): Promise<Availability[]> {
+    this.logger.info('listing available availabilities');
 
     const params: QueryCommandInput = {
-      KeyConditionExpression: '#from = :at',
+      KeyConditionExpression:
+        'available = :available and #from between :from and :to',
+      IndexName: this.availabilitiesAvailableFromIndex,
       ExpressionAttributeNames: {
         '#from': 'from',
       },
       ExpressionAttributeValues: {
-        ':at': { S: at },
+        ':available': { S: 'available' },
+        ':from': { S: from },
+        ':to': { S: to },
       },
       TableName: this.availabilitiesTable,
-      IndexName: this.availabilitiesFromIndex,
     };
 
     try {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      return (items as unknown) as Availability[];
+      return (items as unknown) as Appointment[];
     } catch (error) {
       this.logger.error(`error listing available availabilities ${error}`);
       return [];
     }
+  }
+
+  async listAvailableByTime(at: string): Promise<Availability[]> {
+    this.logger.info(`listing available availabilities at ${at}`);
+
+    return [];
   }
 }
