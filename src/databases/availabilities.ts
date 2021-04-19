@@ -132,11 +132,12 @@ export class AvailabilitiesDB {
       Key: {
         id: { S: id },
       },
-      UpdateExpression: 'remove clientId',
+      UpdateExpression: 'remove clientId and set available = :available',
       ConditionExpression:
         'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
       ExpressionAttributeValues: {
         ':userId': { S: userId },
+        ':available': { S: 'available' },
       },
     };
 
@@ -228,11 +229,14 @@ export class AvailabilitiesDB {
         ':to': { S: to },
       },
       TableName: this.availabilitiesTable,
+      AttributesToGet: ['from'],
     };
 
     try {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
+
+      console.log(items);
 
       return (items as unknown) as Appointment[];
     } catch (error) {

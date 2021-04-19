@@ -47,9 +47,14 @@ export async function searchAvailabilitiesByDate(
   const parsedTo = new Date(to).toISOString();
 
   // get times
+  const availabilities = await availabilitiesDB.listAvailabilitiesByDate(
+    parsedFrom,
+    parsedTo
+  );
+
   // filter out appointments
 
-  return [];
+  return availabilities;
 }
 
 export async function searchAvailabilitiesByTime(
