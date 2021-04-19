@@ -11,7 +11,7 @@ export async function getAvailabilities(
   const parsedFrom = new Date(from).toISOString();
   const parsedTo = new Date(to).toISOString();
 
-  const availabilities = await availabilitiesDB.list(
+  const availabilities = await availabilitiesDB.listAvailabilities(
     fpId,
     parsedFrom,
     parsedTo
@@ -26,7 +26,7 @@ export async function createAvailability(
 ): Promise<Availability['id']> {
   const parsedFrom = new Date(from).toISOString();
 
-  const id = await availabilitiesDB.create(fpId, parsedFrom);
+  const id = await availabilitiesDB.createAvailability(fpId, parsedFrom);
 
   return id;
 }
@@ -35,7 +35,7 @@ export async function deleteAvailability(
   id: string,
   fpId: string
 ): Promise<void> {
-  await availabilitiesDB.delete(id, fpId);
+  await availabilitiesDB.deleteAvailability(id, fpId);
 }
 
 export async function searchAvailabilitiesByDate(
@@ -46,7 +46,10 @@ export async function searchAvailabilitiesByDate(
   const parsedFrom = new Date(from).toISOString();
   const parsedTo = new Date(to).toISOString();
 
-  return await availabilitiesDB.listAvailableByDate(parsedFrom, parsedTo);
+  // get times
+  // filter out appointments
+
+  return [];
 }
 
 export async function searchAvailabilitiesByTime(

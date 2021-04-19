@@ -30,7 +30,10 @@ export class AvailabilitiesDB {
       .AVAILABILITIES_FROM_INDEX
   ) {}
 
-  async create(fpId: string, from: string): Promise<Availability['id']> {
+  async createAvailability(
+    fpId: string,
+    from: string
+  ): Promise<Availability['id']> {
     this.logger.info(`creating availability ${from}`);
 
     const id = uuidv4();
@@ -40,6 +43,7 @@ export class AvailabilitiesDB {
         id,
         fpId,
         from,
+        available: true,
       }),
     };
 
@@ -50,7 +54,11 @@ export class AvailabilitiesDB {
     return id;
   }
 
-  async list(fpId: string, from: string, to: string): Promise<Availability[]> {
+  async listAvailabilities(
+    fpId: string,
+    from: string,
+    to: string
+  ): Promise<Availability[]> {
     this.logger.info('listing availabilities');
 
     const params: QueryCommandInput = {
@@ -78,7 +86,7 @@ export class AvailabilitiesDB {
     }
   }
 
-  async delete(id: string, fpId: string): Promise<void> {
+  async deleteAvailability(id: string, fpId: string): Promise<void> {
     this.logger.info('deleting availability');
 
     const params: DeleteItemCommandInput = {
@@ -106,7 +114,7 @@ export class AvailabilitiesDB {
       Key: {
         id: { S: id },
       },
-      UpdateExpression: 'set clientId = :clientId',
+      UpdateExpression: 'set clientId = :clientId and remove available',
       ExpressionAttributeValues: {
         ':clientId': { S: clientId },
       },
