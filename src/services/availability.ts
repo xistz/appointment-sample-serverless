@@ -60,6 +60,8 @@ export async function searchAvailabilitiesByDate(
   );
   const appointmentTimes = appointments.map((appointment) => appointment.from);
 
+  console.info('appointmentTimes', appointmentTimes);
+
   // exclude client appointment times
   const availableTimes = availabilities.filter(
     (availability) => !appointmentTimes.includes(availability.from)
