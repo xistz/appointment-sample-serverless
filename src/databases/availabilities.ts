@@ -12,7 +12,11 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
 import { Appointment } from '@models/appointment';
-import { Availability, AvailabilityTime } from '@models/availability';
+import {
+  Availability,
+  AvailabilityFP,
+  AvailabilityTime,
+} from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
 
 export class AvailabilitiesDB {
@@ -79,7 +83,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      return (items as unknown) as Availability[];
+      return items as Availability[];
     } catch (error) {
       this.logger.error(`error listing availabilities ${error}`);
       return [];
@@ -174,7 +178,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      return (items as unknown) as Appointment[];
+      return items as Appointment[];
     } catch (error) {
       this.logger.error(`error listing availabilities ${error}`);
       return [];
@@ -207,7 +211,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      return (items as unknown) as Appointment[];
+      return items as Appointment[];
     } catch (error) {
       this.logger.error(`error listing availabilities ${error}`);
       return [];
@@ -218,7 +222,7 @@ export class AvailabilitiesDB {
     from: string,
     to: string
   ): Promise<AvailabilityTime[]> {
-    this.logger.info('listing available availabilities');
+    this.logger.info(`listing available availabilities from ${from} to ${to}`);
 
     const params: QueryCommandInput = {
       KeyConditionExpression:
@@ -247,8 +251,32 @@ export class AvailabilitiesDB {
     }
   }
 
-  async listAvailableByTime(at: string): Promise<Availability[]> {
+  async listAvailabilitiesByTime(at: string): Promise<AvailabilityFP[]> {
     this.logger.info(`listing available availabilities at ${at}`);
+
+    const params: QueryCommandInput = {
+      KeyConditionExpression: 'available = :available and #from = :at',
+      IndexName: this.availabilitiesAvailableFromIndex,
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':available': { S: 'available' },
+        ':at': { S: at },
+      },
+      TableName: this.availabilitiesTable,
+      ProjectionExpression: 'id, fpId',
+    };
+
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
+
+      return items as AvailabilityFP[];
+    } catch (error) {
+      this.logger.error(`error listing available availabilities ${error}`);
+      return [];
+    }
 
     return [];
   }
