@@ -229,7 +229,7 @@ export class AvailabilitiesDB {
         ':to': { S: to },
       },
       TableName: this.availabilitiesTable,
-      AttributesToGet: ['from'],
+      ProjectionExpression: '#from',
     };
 
     try {
