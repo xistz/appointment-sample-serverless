@@ -236,9 +236,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      console.log(items);
-
-      return (items as unknown) as Appointment[];
+      return ([...new Set(items)] as unknown) as Appointment[];
     } catch (error) {
       this.logger.error(`error listing available availabilities ${error}`);
       return [];
