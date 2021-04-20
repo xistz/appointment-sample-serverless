@@ -127,21 +127,25 @@ export class AvailabilitiesDB {
   async deleteAppointment(id: string, userId: string): Promise<void> {
     this.logger.info('deleting appointment');
 
-    const params: UpdateItemCommandInput = {
-      TableName: this.availabilitiesTable,
-      Key: {
-        id: { S: id },
-      },
-      UpdateExpression: 'remove clientId and set available = :available',
-      ConditionExpression:
-        'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
-      ExpressionAttributeValues: {
-        ':userId': { S: userId },
-        ':available': { S: 'available' },
-      },
-    };
+    try {
+      const params: UpdateItemCommandInput = {
+        TableName: this.availabilitiesTable,
+        Key: {
+          id: { S: id },
+        },
+        UpdateExpression: 'remove clientId and set available = :available',
+        ConditionExpression:
+          'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
+        ExpressionAttributeValues: {
+          ':userId': { S: userId },
+          ':available': { S: 'available' },
+        },
+      };
 
-    await this.docClient.send(new UpdateItemCommand(params));
+      await this.docClient.send(new UpdateItemCommand(params));
+    } catch (error) {
+      this.logger.error(`error deleting appointment ${error}`);
+    }
   }
 
   async listClientAppointments(
