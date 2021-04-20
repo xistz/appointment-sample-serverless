@@ -52,9 +52,20 @@ export async function searchAvailabilitiesByDate(
     parsedTo
   );
 
-  // filter out appointments
+  // get client appointments
+  const appointments = await availabilitiesDB.listClientAppointments(
+    clientId,
+    from,
+    to
+  );
+  const appointmentTimes = appointments.map((appointment) => appointment.from);
 
-  return availabilities;
+  // exclude client appointment times
+  const availableTimes = availabilities.filter(
+    (availability) => !appointmentTimes.includes(availability.from)
+  );
+
+  return availableTimes;
 }
 
 export async function searchAvailabilitiesByTime(
