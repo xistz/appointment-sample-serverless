@@ -52,6 +52,8 @@ export async function searchAvailabilitiesByDate(
     parsedTo
   );
 
+  console.info('availabilities service search by date', availabilities);
+
   // filter out appointments
 
   return availabilities;
