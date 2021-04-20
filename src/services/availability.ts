@@ -55,8 +55,8 @@ export async function searchAvailabilitiesByDate(
   // get client appointments
   const appointments = await availabilitiesDB.listClientAppointments(
     clientId,
-    from,
-    to
+    parsedFrom,
+    parsedTo
   );
   const appointmentTimes = appointments.map((appointment) => appointment.from);
 
