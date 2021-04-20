@@ -35,24 +35,16 @@ export async function listAppointments(
         parsedTo
       );
 
-  console.info('listAppointments service before length', appointments);
-
   if (appointments.length === 0) {
     return [];
   }
-
-  console.info('listAppointments service after length', appointments);
 
   const userIds = new Set<string>();
   appointments.forEach((appointment) =>
     userIds.add(appointment.clientId).add(appointment.fpId)
   );
 
-  console.info('listAppointments service userIds', userIds);
-
   const users = await getUsers(Array.from(userIds));
-
-  console.info('listAppointments service users', users);
 
   const appointmentDetails = appointments.map((appointment) => {
     const { id, from } = appointment;
