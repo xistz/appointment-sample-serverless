@@ -1,4 +1,8 @@
-import { Availability, AvailabilityTime } from '@models/availability';
+import {
+  Availability,
+  AvailabilityDetail,
+  AvailabilityTime,
+} from '@models/availability';
 import { AvailabilitiesDB } from '@databases/availabilities';
 
 const availabilitiesDB = new AvailabilitiesDB();
@@ -70,6 +74,13 @@ export async function searchAvailabilitiesByDate(
 
 export async function searchAvailabilitiesByTime(
   at: string
-): Promise<Availability[]> {
+): Promise<AvailabilityDetail[]> {
+  const parsedAt = new Date(at).toISOString();
+
+  // get availabilities
+  const availabilities = await availabilitiesDB.listAvailabilitiesByTime(
+    parsedAt
+  );
+
   return [];
 }
