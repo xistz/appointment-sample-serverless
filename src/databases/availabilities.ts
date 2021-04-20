@@ -12,7 +12,7 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
 import { Appointment } from '@models/appointment';
-import { Availability } from '@models/availability';
+import { Availability, AvailabilityTime } from '@models/availability';
 import { v4 as uuidv4 } from 'uuid';
 
 export class AvailabilitiesDB {
@@ -213,7 +213,7 @@ export class AvailabilitiesDB {
   async listAvailabilitiesByDate(
     from: string,
     to: string
-  ): Promise<Availability[]> {
+  ): Promise<AvailabilityTime[]> {
     this.logger.info('listing available availabilities');
 
     const params: QueryCommandInput = {
@@ -236,12 +236,7 @@ export class AvailabilitiesDB {
       const result = await this.docClient.send(new QueryCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
-      console.info(
-        'set',
-        [...new Set(items.map((item) => item.from))].map((from) => ({ from }))
-      );
-
-      return ([...new Set(items)] as unknown) as Appointment[];
+      return getUniqueTimes(items as Availability[]);
     } catch (error) {
       this.logger.error(`error listing available availabilities ${error}`);
       return [];
@@ -254,3 +249,6 @@ export class AvailabilitiesDB {
     return [];
   }
 }
+
+const getUniqueTimes = (items: Availability[]): AvailabilityTime[] =>
+  [...new Set(items.map((item) => item.from))].map((from) => ({ from }));

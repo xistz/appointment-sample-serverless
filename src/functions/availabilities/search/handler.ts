@@ -5,9 +5,7 @@ import {
 import { getUser, isClient } from '@libs/Jwt';
 import { middyfy } from '@libs/lambda';
 import { createLogger } from '@libs/logger';
-import { Availability } from '@models/availability';
 import {
-  getAvailabilities,
   searchAvailabilitiesByDate,
   searchAvailabilitiesByTime,
 } from '@services/availability';
@@ -33,15 +31,15 @@ const handler: ValidatedEventQueryAPIGatewayProxyEvent<typeof schema> = async (
 
   logger.info(`getting availabilities for client ${from} and ${to}`);
 
-  let availabilities: Availability[];
+  let data;
 
   if (from && to) {
-    availabilities = await searchAvailabilitiesByDate(from, to, user.id);
+    data = await searchAvailabilitiesByDate(from, to, user.id);
   } else {
-    availabilities = await searchAvailabilitiesByTime(at);
+    data = await searchAvailabilitiesByTime(at);
   }
 
-  return formatJSONResponse({ data: availabilities });
+  return formatJSONResponse({ data });
 };
 
 export const main = middyfy(handler);

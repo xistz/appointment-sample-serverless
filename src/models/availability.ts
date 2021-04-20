@@ -3,3 +3,7 @@ export interface Availability {
   fpId: string;
   from: string;
 }
+
+export interface AvailabilityTime {
+  from: string;
+}
