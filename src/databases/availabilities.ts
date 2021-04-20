@@ -133,7 +133,7 @@ export class AvailabilitiesDB {
         Key: {
           id: { S: id },
         },
-        UpdateExpression: 'remove clientId and set available = :available',
+        UpdateExpression: 'remove clientId set available = :available',
         ConditionExpression:
           'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
         ExpressionAttributeValues: {
