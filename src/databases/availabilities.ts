@@ -194,7 +194,7 @@ export class AvailabilitiesDB {
 
     const params: QueryCommandInput = {
       KeyConditionExpression: 'fpId = :fpId and #from between :from and :to',
-      FilterExpression: 'attribute_exists(client_id)',
+      FilterExpression: 'attribute_exists(clientId)',
       IndexName: this.availabilitiesFpIdFromIndex,
       ExpressionAttributeNames: {
         '#from': 'from',
