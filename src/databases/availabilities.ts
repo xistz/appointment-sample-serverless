@@ -251,35 +251,33 @@ export class AvailabilitiesDB {
     }
   }
 
-  // async listAvailabilitiesByTime(at: string): Promise<AvailabilityFP[]> {
-  //   this.logger.info(`listing available availabilities at ${at}`);
+  async listAvailabilitiesByTime(at: string): Promise<AvailabilityFP[]> {
+    this.logger.info(`listing available availabilities at ${at}`);
 
-  //   const params: QueryCommandInput = {
-  //     KeyConditionExpression: 'available = :available and #from = :at',
-  //     IndexName: this.availabilitiesAvailableFromIndex,
-  //     ExpressionAttributeNames: {
-  //       '#from': 'from',
-  //     },
-  //     ExpressionAttributeValues: {
-  //       ':available': { S: 'available' },
-  //       ':at': { S: at },
-  //     },
-  //     TableName: this.availabilitiesTable,
-  //     ProjectionExpression: 'id, fpId',
-  //   };
+    const params: QueryCommandInput = {
+      KeyConditionExpression: '#from = :at',
+      IndexName: this.availabilitiesFromIndex,
+      ExpressionAttributeNames: {
+        '#from': 'from',
+      },
+      ExpressionAttributeValues: {
+        ':at': { S: at },
+      },
+      TableName: this.availabilitiesTable,
+      FilterExpression: 'attribute_not_exists(clientId)',
+      ProjectionExpression: 'id, fpId',
+    };
 
-  //   try {
-  //     const result = await this.docClient.send(new QueryCommand(params));
-  //     const items = result.Items.map((item) => unmarshall(item));
+    try {
+      const result = await this.docClient.send(new QueryCommand(params));
+      const items = result.Items.map((item) => unmarshall(item));
 
-  //     return items as AvailabilityFP[];
-  //   } catch (error) {
-  //     this.logger.error(`error listing available availabilities ${error}`);
-  //     return [];
-  //   }
-
-  //   return [];
-  // }
+      return items as AvailabilityFP[];
+    } catch (error) {
+      this.logger.error(`error listing available availabilities ${error}`);
+      return [];
+    }
+  }
 }
 
 const getUniqueTimes = (items: Availability[]): AvailabilityTime[] =>
