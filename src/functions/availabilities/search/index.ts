@@ -24,7 +24,7 @@ export default {
   iamRoleStatements: [
     {
       Effect: 'Allow',
-      Action: ['dynamodb:Query', 'dyanmodb:Scan'],
+      Action: ['dynamodb:Query', 'dynamodb:Scan'],
       Resource: [
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.AVAILABILITIES_TABLE}/index/${self:provider.environment.AVAILABILITIES_FROM_INDEX}',
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.AVAILABILITIES_TABLE}',
