@@ -47,12 +47,12 @@ export async function listAppointments(
     userIds.add(appointment.clientId).add(appointment.fpId)
   );
 
-  const users = await getUsers(Array.from(userIds));
+  const users = await getUsers([...userIds]);
 
   const appointmentDetails = appointments.map((appointment) => {
-    const { id, from } = appointment;
-    const fp = users[appointment.fpId];
-    const client = users[appointment.clientId];
+    const { id, from, fpId, clientId } = appointment;
+    const fp = users[fpId];
+    const client = users[clientId];
 
     return {
       id,
