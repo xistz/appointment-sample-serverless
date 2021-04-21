@@ -281,4 +281,6 @@ export class AvailabilitiesDB {
 }
 
 const getUniqueTimes = (items: Availability[]): AvailabilityTime[] =>
-  [...new Set(items.map((item) => item.from))].map((from) => ({ from }));
+  [...new Set(items.map((item) => item.from))]
+    .sort((a, b) => Date.parse(b) - Date.parse(a))
+    .map((from) => ({ from }));
