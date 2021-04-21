@@ -30,5 +30,11 @@ export default {
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.AVAILABILITIES_TABLE}',
       ],
     },
+    {
+      Effect: 'Allow',
+      Action: ['dynamodb:Query'],
+      Resource:
+        'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.AVAILABILITIES_TABLE}/index/${self:provider.environment.AVAILABILITIES_CLIENT_ID_FROM_INDEX}',
+    },
   ],
 };
