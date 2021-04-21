@@ -41,7 +41,7 @@ const serverlessConfiguration: AWS = {
       AVAILABILITIES_TABLE: 'Availabilities-${self:provider.stage}',
       AVAILABILITIES_FP_ID_FROM_INDEX: 'AvailabilitiesFpIdFromIndex',
       AVAILABILITIES_CLIENT_ID_FROM_INDEX: 'AvailabilitiesClientIdFromIndex',
-      AVAILABILITIES_AVAILABLE_FROM_INDEX: 'AvailabilitiesAvailableFromIndex',
+      AVAILABILITIES_FROM_INDEX: 'AvailabilitiesAvailableFromIndex',
     },
     lambdaHashingVersion: '20201221',
   },
@@ -88,7 +88,6 @@ const serverlessConfiguration: AWS = {
             },
             { AttributeName: 'from', AttributeType: 'S' },
             { AttributeName: 'clientId', AttributeType: 'S' },
-            { AttributeName: 'available', AttributeType: 'S' },
           ],
           KeySchema: [
             {
@@ -135,15 +134,11 @@ const serverlessConfiguration: AWS = {
             },
             {
               IndexName:
-                '${self:provider.environment.AVAILABILITIES_AVAILABLE_FROM_INDEX}',
+                '${self:provider.environment.AVAILABILITIES_FROM_INDEX}',
               KeySchema: [
                 {
-                  AttributeName: 'available',
-                  KeyType: 'HASH',
-                },
-                {
                   AttributeName: 'from',
-                  KeyType: 'RANGE',
+                  KeyType: 'HASH',
                 },
               ],
               Projection: {

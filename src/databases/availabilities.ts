@@ -8,6 +8,8 @@ import {
   QueryCommandInput,
   UpdateItemCommand,
   UpdateItemCommandInput,
+  ScanCommand,
+  ScanCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { createLogger } from '@libs/logger';
@@ -30,8 +32,8 @@ export class AvailabilitiesDB {
       .AVAILABILITIES_FP_ID_FROM_INDEX,
     private readonly availabilitiesClientIdFromIndex = process.env
       .AVAILABILITIES_CLIENT_ID_FROM_INDEX,
-    private readonly availabilitiesAvailableFromIndex = process.env
-      .AVAILABILITIES_AVAILABLE_FROM_INDEX
+    private readonly availabilitiesFromIndex = process.env
+      .AVAILABILITIES_FROM_INDEX
   ) {}
 
   async createAvailability(
@@ -47,7 +49,6 @@ export class AvailabilitiesDB {
         id,
         fpId,
         from,
-        available: 'available',
       }),
     };
 
@@ -118,7 +119,7 @@ export class AvailabilitiesDB {
       Key: {
         id: { S: id },
       },
-      UpdateExpression: 'set clientId = :clientId and remove available',
+      UpdateExpression: 'set clientId = :clientId',
       ExpressionAttributeValues: {
         ':clientId': { S: clientId },
       },
@@ -137,12 +138,11 @@ export class AvailabilitiesDB {
         Key: {
           id: { S: id },
         },
-        UpdateExpression: 'remove clientId set available = :available',
+        UpdateExpression: 'remove clientId',
         ConditionExpression:
           'attribute_exists(clientId) and (clientId = :userId or fpId = :userId)',
         ExpressionAttributeValues: {
           ':userId': { S: userId },
-          ':available': { S: 'available' },
         },
       };
 
@@ -224,24 +224,24 @@ export class AvailabilitiesDB {
   ): Promise<AvailabilityTime[]> {
     this.logger.info(`listing available availabilities from ${from} to ${to}`);
 
-    const params: QueryCommandInput = {
-      KeyConditionExpression:
-        'available = :available and #from between :from and :to',
-      IndexName: this.availabilitiesAvailableFromIndex,
+    const params: ScanCommandInput = {
+      IndexName: this.availabilitiesFromIndex,
+      TableName: this.availabilitiesTable,
+      FilterExpression:
+        '#from between :from and :to and attribute_not_exists(clientId)',
       ExpressionAttributeNames: {
         '#from': 'from',
       },
       ExpressionAttributeValues: {
-        ':available': { S: 'available' },
         ':from': { S: from },
         ':to': { S: to },
       },
-      TableName: this.availabilitiesTable,
+
       ProjectionExpression: '#from',
     };
 
     try {
-      const result = await this.docClient.send(new QueryCommand(params));
+      const result = await this.docClient.send(new ScanCommand(params));
       const items = result.Items.map((item) => unmarshall(item));
 
       return getUniqueTimes(items as Availability[]);
@@ -251,35 +251,35 @@ export class AvailabilitiesDB {
     }
   }
 
-  async listAvailabilitiesByTime(at: string): Promise<AvailabilityFP[]> {
-    this.logger.info(`listing available availabilities at ${at}`);
+  // async listAvailabilitiesByTime(at: string): Promise<AvailabilityFP[]> {
+  //   this.logger.info(`listing available availabilities at ${at}`);
 
-    const params: QueryCommandInput = {
-      KeyConditionExpression: 'available = :available and #from = :at',
-      IndexName: this.availabilitiesAvailableFromIndex,
-      ExpressionAttributeNames: {
-        '#from': 'from',
-      },
-      ExpressionAttributeValues: {
-        ':available': { S: 'available' },
-        ':at': { S: at },
-      },
-      TableName: this.availabilitiesTable,
-      ProjectionExpression: 'id, fpId',
-    };
+  //   const params: QueryCommandInput = {
+  //     KeyConditionExpression: 'available = :available and #from = :at',
+  //     IndexName: this.availabilitiesAvailableFromIndex,
+  //     ExpressionAttributeNames: {
+  //       '#from': 'from',
+  //     },
+  //     ExpressionAttributeValues: {
+  //       ':available': { S: 'available' },
+  //       ':at': { S: at },
+  //     },
+  //     TableName: this.availabilitiesTable,
+  //     ProjectionExpression: 'id, fpId',
+  //   };
 
-    try {
-      const result = await this.docClient.send(new QueryCommand(params));
-      const items = result.Items.map((item) => unmarshall(item));
+  //   try {
+  //     const result = await this.docClient.send(new QueryCommand(params));
+  //     const items = result.Items.map((item) => unmarshall(item));
 
-      return items as AvailabilityFP[];
-    } catch (error) {
-      this.logger.error(`error listing available availabilities ${error}`);
-      return [];
-    }
+  //     return items as AvailabilityFP[];
+  //   } catch (error) {
+  //     this.logger.error(`error listing available availabilities ${error}`);
+  //     return [];
+  //   }
 
-    return [];
-  }
+  //   return [];
+  // }
 }
 
 const getUniqueTimes = (items: Availability[]): AvailabilityTime[] =>
