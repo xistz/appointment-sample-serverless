@@ -27,6 +27,9 @@ export async function listAppointments(
   const parsedFrom = new Date(from).toISOString();
   const parsedTo = new Date(to).toISOString();
 
+  console.debug('toString', new Date(from).toString());
+  console.debug('toISOString', parsedFrom);
+
   const appointments = isFP
     ? await availabilitiesDB.listFpAppointments(userId, parsedFrom, parsedTo)
     : await availabilitiesDB.listClientAppointments(
