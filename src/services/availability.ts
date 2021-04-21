@@ -4,6 +4,7 @@ import {
   AvailabilityTime,
 } from '@models/availability';
 import { AvailabilitiesDB } from '@databases/availabilities';
+import { getUsers } from './user';
 
 const availabilitiesDB = new AvailabilitiesDB();
 
@@ -82,5 +83,19 @@ export async function searchAvailabilitiesByTime(
     parsedAt
   );
 
-  return [];
+  const userIds = new Set<string>();
+  availabilities.forEach((availability) => userIds.add(availability.fpId));
+  const users = await getUsers([...userIds]);
+
+  const availabilityDetails = availabilities.map((availability) => {
+    const { id, fpId } = availability;
+    const fp = users[fpId];
+
+    return {
+      id,
+      fp,
+    };
+  });
+
+  return availabilityDetails;
 }

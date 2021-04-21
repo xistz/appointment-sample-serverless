@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export interface Availability extends AvailabilityTime, AvailabilityFP {}
 
 export interface AvailabilityTime {
@@ -9,8 +11,7 @@ export interface AvailabilityFP extends AvailabilityId {
 }
 
 export interface AvailabilityDetail extends AvailabilityId {
-  fpName: string;
-  fpPicture: string;
+  fp: User;
 }
 
 interface AvailabilityId {
