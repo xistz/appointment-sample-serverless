@@ -28,20 +28,67 @@ The project code base is mainly located within the `src` folder. This folder is 
 ```shell
 .
 ├── src
+│   ├── databases               # Database layer
+│   │   └── availabilities.ts   # Availabilities dynamodb store
+│   │
 │   ├── functions               # Lambda configuration and source code folder
-│   │   ├── register
-│   │   │   ├── handler.ts      # `register` lambda source code
-│   │   │   ├── index.ts        # `register` lambda Serverless configuration
-│   │   │   └── schema.ts       # `register` lambda input event JSON-Schema
+│   │   ├── appointments
+│   │   │   ├── create
+│   │   │   │   ├── handler.ts  # `createAppointment` lambda source code
+│   │   │   │   ├── index.ts    # `createAppointment` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `createAppointment` lambda input event JSON-Schema
+│   │   │   ├── delete
+│   │   │   │   ├── handler.ts  # `deleteAppointment` lambda source code
+│   │   │   │   ├── index.ts    # `deleteAppointment` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `deleteAppointment` lambda input event JSON-Schema
+│   │   │   ├── list
+│   │   │   │   ├── handler.ts  # `listAppointments` lambda source code
+│   │   │   │   ├── index.ts    # `listAppointments` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `listAppointments` lambda input event JSON-Schema
+│   │   │   └── index.ts        # appointments lambda Serverless configuration
+│   │   ├── auth
+│   │   │   ├── handler.ts      # `auth` lambda source code
+│   │   │   └── index.ts        # `auth` lambda Serverless configuration
+│   │   ├── availabilities
+│   │   │   ├── create
+│   │   │   │   ├── handler.ts  # `createAvailability` lambda source code
+│   │   │   │   ├── index.ts    # `createAvailability` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `createAvailability` lambda input event JSON-Schema
+│   │   │   ├── delete
+│   │   │   │   ├── handler.ts  # `deleteAvailability` lambda source code
+│   │   │   │   ├── index.ts    # `deleteAvailability` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `deleteAvailability` lambda input event JSON-Schema
+│   │   │   ├── list
+│   │   │   │   ├── handler.ts  # `listAvailabilities` lambda source code
+│   │   │   │   ├── index.ts    # `listAvailabilities` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `listAvailabilities` lambda input event JSON-Schema
+│   │   │   ├── search
+│   │   │   │   ├── handler.ts  # `searchAvailabilities` lambda source code
+│   │   │   │   ├── index.ts    # `searchAvailabilities` lambda Serverless configuration
+│   │   │   │   └── schema.ts   # `searchAvailabilities` lambda input event JSON-Schema
+│   │   │   └── index.ts        # availabilities lambda Serverless configuration
+│   │   └── register
+│   │       ├── handler.ts      # `register` lambda source code
+│   │       ├── index.ts        # `register` lambda Serverless configuration
+│   │       └── schema.ts       # `register` lambda input event JSON-Schema
 │   │
 │   ├── libs                    # Lambda shared code
 │   │   └── apiGateway.ts       # API Gateway specific helpers
 │   │   └── handlerResolver.ts  # Sharable library for resolving lambda handlers
+│   │   └── Jwt.ts              # Jwt helpers
 │   │   └── lambda.ts           # Lambda middleware
+│   │   └── lambda.ts           # Logging middleware
+│   │
+│   ├── models
+│   │   └── appointment.ts      # appointment models
+│   │   └── availability.ts     # availability models
+│   │   └── user.ts             # user model
 │   │
 │   └── services                # Service layer
-│       └── authorization.ts    # Authorization layer
-│       └── user.ts             # User layer
+│       └── appointment.ts      # Appointment service
+│       └── authorization.ts    # Authorization service
+│       └── availability.ts     # Availability service
+│       └── user.ts             # User service
 │
 ├── package.json
 ├── serverless.ts               # Serverless service file
