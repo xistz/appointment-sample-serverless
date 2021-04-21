@@ -283,7 +283,7 @@ export class AvailabilitiesDB {
 const getUniqueTimes = (items: Availability[]): AvailabilityTime[] => {
   const uniqueTimes = [...new Set(items.map((item) => item.from))];
   console.debug('before sort', uniqueTimes);
-  const sortReturn = uniqueTimes.sort((a, b) => Date.parse(b) - Date.parse(a));
+  const sortReturn = uniqueTimes.sort((a, b) => Date.parse(a) - Date.parse(b));
   console.debug('after sort', uniqueTimes);
   console.debug('sort return', sortReturn);
 
